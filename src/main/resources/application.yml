@@ -6,7 +6,7 @@ spring:
   jpa:
     database: POSTGRESQL
   datasource:
-    url: jdbc:postgresql://localhost:7777/hw-tink-1
+    url: jdbc:postgresql://localhost:7777/server_db
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
