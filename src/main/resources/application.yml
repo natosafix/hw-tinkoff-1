@@ -3,7 +3,15 @@ spring:
     graphiql:
       enabled: true
     path: /graphql
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://localhost:7777/hw-tink-1
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:liquibase/master.xml
 
 server:
   port: 8080
-  address: localhost
