@@ -1,17 +1,5 @@
 version: "3"
 services:
-  server:
-    image: hw-tink-1:0.0.1
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8181:8080"
-    depends_on:
-      - pg-server-db
-    environment:
-      - SERVER_PORT=8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://pg-server-db/server_db
 
   pg-server-db:
     image: postgres:14-alpine3.18
@@ -27,5 +15,43 @@ services:
     ports:
       - "15432:5432"
 
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: server
+    volumes:
+      - ./environment/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - server-mongodb:/data/db
+      - server-mongo-config:/data/configdb
+
+  redis:
+    image: redis:7.2-rc-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --logLevel warning --requirepass RedisPassword
+    volumes:
+      - server-redis:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: user
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address :9001
+    volumes:
+      - ./environment/minio/data:/data
+
 volumes:
   server-db:
+  server-mongodb:
+  server-mongo-config:
+  server-redis:
