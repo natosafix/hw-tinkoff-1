@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="create-message-image-links-table" author="natosafix">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="message-image-links"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="message_image_links">
+            <column name="message_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_link" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addPrimaryKey tableName="message_image_links"
+                       columnNames="message_id, image_link"
+                       constraintName="message_image_pk"/>
+
+        <addForeignKeyConstraint baseTableName="message_image_links"
+                                 baseColumnNames="message_id"
+                                 constraintName="message_image_links_messages_fk"
+                                 referencedTableName="messages"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="message_image_links"
+                                 baseColumnNames="image_link"
+                                 constraintName="message_image_links_images_fk"
+                                 referencedTableName="images"
+                                 referencedColumnNames="link"/>
+    </changeSet>
+</databaseChangeLog>

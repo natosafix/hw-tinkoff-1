@@ -1,9 +1,7 @@
 package org.example.exceptions;
 
-public class MessageNotFoundException extends RuntimeException {
-    public int id;
-
+public class MessageNotFoundException extends BaseNotFoundException {
     public MessageNotFoundException(int id) {
-        this.id = id;
+        super("Не найдено сообщение с id=" + id);
     }
 }
